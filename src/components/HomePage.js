@@ -1,9 +1,10 @@
-import React from 'react'; 
+import React, { useState } from 'react'; 
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -19,11 +20,11 @@ const useStyles = makeStyles(theme => ({
         textAlign: 'left',
         fontSize: 30,
         color: "white",
-        backgroundColor: "#006D76"
+        backgroundColor: "#006D76" //teal
     },
     button: {
         margin: theme.spacing(1),
-        backgroundColor: "#EA7200",
+        backgroundColor: "#EA7200", //orange
         '&:hover': {
             opacity: 0.5,
             backgroundColor: "#EA7200",
@@ -31,11 +32,35 @@ const useStyles = makeStyles(theme => ({
     },
     bodyTitle: {
         color: "#006D76"
-    }
+    },
+    progress: {
+        margin: theme.spacing(2),
+        color: "#EA7200"
+    },
   }));
+
 
 function HomePage() {
     const classes = useStyles();
+
+    const [submitted, setSubmitted] = useState(false); 
+
+    var handleSubmit = () => {
+        setSubmitted(true);
+        console.log("submit pressed"); 
+    }
+
+    var renderSubmit = () => {
+        if(!submitted) {
+            return (
+                <Button className={classes.button} onClick={handleSubmit.bind(this)}>
+                    Submit
+                </Button>
+            );
+        } 
+
+        return  <CircularProgress className={classes.progress} />
+    }
 
     return (
     <div className={classes.root}>
@@ -58,9 +83,9 @@ function HomePage() {
                 variant="outlined"
             />
             <br />
-            <Button className={classes.button}>
-                Submit
-            </Button>
+            <div>
+                {renderSubmit()}
+            </div>
           </Paper>
         </Grid>
       </Grid>
