@@ -44,10 +44,30 @@ function HomePage() {
     const classes = useStyles();
 
     const [submitted, setSubmitted] = useState(false); 
+    const [username, setUsername] = useState(""); 
 
     var handleSubmit = () => {
         setSubmitted(true);
         console.log("submit pressed"); 
+        var socket = new WebSocket("ws://localhost:8080/connect?user=" + username);
+        socket.onopen = () => {
+            setSubmitted(false);
+            console.log("socket opened"); 
+            //route to chats page 
+        }
+        socket.onclose = () => {
+            setSubmitted(false);
+            console.log("socket closed immediately"); 
+        }
+        socket.onerror = () => {
+            setSubmitted(false);
+            console.log("socket error");
+            //could not connect - display error
+        }
+    }
+
+    var changeUsername = (e) => {
+        setUsername(e.target.value);
     }
 
     var renderSubmit = () => {
@@ -77,10 +97,11 @@ function HomePage() {
             <TextField
                 id="outlined-with-placeholder"
                 label="username"
-                placeholder="user123"
+                placeholder="example-user"
                 className={classes.textField}
                 margin="normal"
                 variant="outlined"
+                onChange={changeUsername.bind(this)}
             />
             <br />
             <div>
