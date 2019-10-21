@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { navigate } from '@reach/router'; 
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -61,12 +62,16 @@ function HomePage() {
             setSubmitted(false);
             setSubmitError("Cannot have a colon in the username."); 
             return;   
+        } else if(username === "") {
+            setSubmitted(false);
+            setSubmitError("Username cannot be empty.")
         }
         
-        connectWebsocket(); 
+        //connectWebsocket(); 
+        navigate("/chat", { state: {username: username }}); 
     }
 
-    var connectWebsocket = () => {
+    /*var connectWebsocket = () => {
         var socket = new WebSocket("ws://localhost:8080/connect?user=" + username);
         socket.onopen = () => {
             setSubmitted(false);
@@ -83,7 +88,7 @@ function HomePage() {
             console.log("socket error");
             //could not connect - display error
         }
-    }
+    }*/
 
     var validUserName = (username) => {
         if(username.includes(":")){
