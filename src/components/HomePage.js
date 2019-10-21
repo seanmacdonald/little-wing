@@ -37,6 +37,12 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(2),
         color: "#EA7200"
     },
+    textField: {
+    }, 
+    text: {
+        color: "red",
+        fontSize: 14
+    }
   }));
 
 
@@ -45,10 +51,22 @@ function HomePage() {
 
     const [submitted, setSubmitted] = useState(false); 
     const [username, setUsername] = useState(""); 
+    const [submitError, setSubmitError] = useState(""); 
 
     var handleSubmit = () => {
         setSubmitted(true);
-        console.log("submit pressed"); 
+        setSubmitError(""); 
+        
+        if(!validUserName(username)){
+            setSubmitted(false);
+            setSubmitError("Cannot have a colon in the username."); 
+            return;   
+        }
+        
+        connectWebsocket(); 
+    }
+
+    var connectWebsocket = () => {
         var socket = new WebSocket("ws://localhost:8080/connect?user=" + username);
         socket.onopen = () => {
             setSubmitted(false);
@@ -61,9 +79,18 @@ function HomePage() {
         }
         socket.onerror = () => {
             setSubmitted(false);
+            setSubmitError("Sorry, there was an error connecting to the server.")
             console.log("socket error");
             //could not connect - display error
         }
+    }
+
+    var validUserName = (username) => {
+        if(username.includes(":")){
+            return false; 
+        }
+
+        return true; 
     }
 
     var changeUsername = (e) => {
@@ -80,6 +107,16 @@ function HomePage() {
         } 
 
         return  <CircularProgress className={classes.progress} />
+    }
+
+    var renderSubmitError = () => {
+        if(submitError !== "") {
+            return (
+                <p>
+                    {submitError}
+                </p>
+            );
+        }
     }
 
     return (
@@ -104,6 +141,9 @@ function HomePage() {
                 onChange={changeUsername.bind(this)}
             />
             <br />
+            <div className={classes.text}>
+                {renderSubmitError()}
+            </div>
             <div>
                 {renderSubmit()}
             </div>
