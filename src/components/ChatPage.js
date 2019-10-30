@@ -1,5 +1,8 @@
 import React, { useState } from 'react'; 
-import { navigate } from '@reach/router'; 
+import { navigate } from '@reach/router';
+import { makeStyles } from '@material-ui/core/styles'; 
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 var connectWebsocket = (username, setConnected) => {
     var socket = new WebSocket("ws://localhost:8080/connect?user=" + username);
@@ -21,7 +24,31 @@ var connectWebsocket = (username, setConnected) => {
     setConnected(true);
 }
 
+const useStyles = makeStyles(theme => ({
+    root: {
+        flexGrow: 1,
+        display: "flex", 
+        flexDirection: "column"
+      },
+    progress: {
+        //margin: theme.spacing(2),
+        color: "#EA7200", 
+    },
+    loading: {
+        //textAlign: "center",
+        //verticalAlign: "middle"
+        alignItems: "center", 
+        display: "flex",
+        justifyContent: "center",
+    }, 
+    loading2: {
+        //verticalAlign: "middle"
+    }
+}));
+
 function ChatPage(props) {
+    const classes = useStyles();
+
     const [username, setUsername] = useState("");
     const [connected, setConnected] = useState(false); 
     const [loading, setLoading] = useState(true); 
@@ -52,14 +79,11 @@ function ChatPage(props) {
         ); 
     }
 
-    //attempt to create a websocket connection with the user value 
+    //while the page is loading: set the username and signal that loading is done
     if (loading) {
         setUsername(user); 
         setLoading(false); 
     }
-
-    //need to work on the state behaviour because it is re rendering 
-    //all the time and causing multiple webscocket connections to be sent
 
     console.log("here")
     console.log(username)
@@ -69,9 +93,25 @@ function ChatPage(props) {
         connectWebsocket(username, setConnected);
     }
 
+    var renderPage = () => {
+        if (loading) {
+            return (
+                <div>
+                    <p>ChatPage</p>
+                </div>
+            );
+        }
+
+        return (
+            <div className={classes.loading}>
+                    <CircularProgress className={classes.progress}/>
+            </div>
+        );
+    }
+
     return (
-        <div>
-            <p>ChatPage</p>
+        <div className={classes.root}>
+            {renderPage()}
         </div>
     );
 }
