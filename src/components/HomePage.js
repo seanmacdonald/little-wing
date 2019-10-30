@@ -71,25 +71,6 @@ function HomePage() {
         navigate("/chat", { state: {username: username }}); 
     }
 
-    /*var connectWebsocket = () => {
-        var socket = new WebSocket("ws://localhost:8080/connect?user=" + username);
-        socket.onopen = () => {
-            setSubmitted(false);
-            console.log("socket opened"); 
-            //route to chats page 
-        }
-        socket.onclose = () => {
-            setSubmitted(false);
-            console.log("socket closed immediately"); 
-        }
-        socket.onerror = () => {
-            setSubmitted(false);
-            setSubmitError("Sorry, there was an error connecting to the server.")
-            console.log("socket error");
-            //could not connect - display error
-        }
-    }*/
-
     var validUserName = (username) => {
         if(username.includes(":")){
             return false; 
