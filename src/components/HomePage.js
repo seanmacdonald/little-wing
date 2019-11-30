@@ -1,54 +1,14 @@
 import React, { useState } from 'react'; 
-import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { navigate } from '@reach/router'; 
-
-const useStyles = makeStyles(theme => ({
-    root: {
-      flexGrow: 1,
-    },
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
-    },
-    navTitle: {
-        padding: theme.spacing(2),
-        textAlign: 'left',
-        fontSize: 30,
-        color: "white",
-        backgroundColor: "#006D76" //teal
-    },
-    button: {
-        margin: theme.spacing(1),
-        backgroundColor: "#EA7200", //orange
-        '&:hover': {
-            opacity: 0.5,
-            backgroundColor: "#EA7200",
-          },
-    },
-    bodyTitle: {
-        color: "#006D76"
-    },
-    progress: {
-        margin: theme.spacing(2),
-        color: "#EA7200"
-    },
-    textField: {
-    }, 
-    text: {
-        color: "red",
-        fontSize: 14
-    }
-  }));
-
+import { HomePageStyles } from '../styles/HomePageStyles'; 
 
 function HomePage() {
-    const classes = useStyles();
+    const classes = HomePageStyles();
 
     const [submitted, setSubmitted] = useState(false); 
     const [username, setUsername] = useState(""); 

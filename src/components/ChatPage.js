@@ -1,7 +1,9 @@
 import React, { useState } from 'react'; 
 import { navigate } from '@reach/router';
-import { makeStyles } from '@material-ui/core/styles'; 
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { ChatPageStyles } from '../styles/ChatPageStyles'; 
 
 
 var connectWebsocket = (username, setConnected) => {
@@ -24,30 +26,8 @@ var connectWebsocket = (username, setConnected) => {
     setConnected(true);
 }
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        flexGrow: 1,
-        display: "flex", 
-        flexDirection: "column"
-      },
-    progress: {
-        //margin: theme.spacing(2),
-        color: "#EA7200", 
-    },
-    loading: {
-        //textAlign: "center",
-        //verticalAlign: "middle"
-        alignItems: "center", 
-        display: "flex",
-        justifyContent: "center",
-    }, 
-    loading2: {
-        //verticalAlign: "middle"
-    }
-}));
-
 function ChatPage(props) {
-    const classes = useStyles();
+    const classes = ChatPageStyles();
 
     const [username, setUsername] = useState("");
     const [connected, setConnected] = useState(false); 
@@ -96,8 +76,12 @@ function ChatPage(props) {
     var renderPage = () => {
         if (!loading) {
             return (
-                <div>
-                    <p>ChatPage</p>
+                <div className={classes.root}>
+                    <Grid container spacing={0}>
+                        <Grid item xs={12}>
+                            <Paper className={classes.navTitle}>Speak Free</Paper>
+                        </Grid>
+                    </Grid>
                 </div>
             );
         }
