@@ -64,13 +64,16 @@ function HomePage() {
             return;   
         } else if(username === "") {
             setSubmitted(false);
-            setSubmitError("Username cannot be empty.")
+            setSubmitError("Username cannot be empty."); 
+            return; 
         }
         
         //connectWebsocket(); 
         navigate("/chat", { state: {username: username }}); 
     }
 
+
+    //checks if the username has a colon
     var validUserName = (username) => {
         if(username.includes(":")){
             return false; 

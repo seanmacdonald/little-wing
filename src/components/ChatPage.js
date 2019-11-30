@@ -94,7 +94,7 @@ function ChatPage(props) {
     }
 
     var renderPage = () => {
-        if (loading) {
+        if (!loading) {
             return (
                 <div>
                     <p>ChatPage</p>
