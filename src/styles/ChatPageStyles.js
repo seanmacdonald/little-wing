@@ -19,6 +19,13 @@ export const ChatPageStyles = makeStyles(theme => ({
     }, 
     loading2: {
         //verticalAlign: "middle"
-    }
+    },
+    navTitle: {
+        padding: theme.spacing(2),
+        textAlign: 'left',
+        fontSize: 30,
+        color: "white",
+        backgroundColor: "#006D76" //teal
+    },
 }));
 

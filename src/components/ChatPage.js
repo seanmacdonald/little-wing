@@ -6,21 +6,21 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { ChatPageStyles } from '../styles/ChatPageStyles'; 
 
 
-var connectWebsocket = (username, setConnected) => {
+var connectWebsocket = (username, setConnected, setError) => {
     var socket = new WebSocket("ws://localhost:8080/connect?user=" + username);
     socket.onopen = () => {
-        setConnected(true);
         console.log("socket opened"); 
+        setConnected(true);
     }
     socket.onclose = () => {
-        setConnected(false);
         console.log("socket closed immediately"); 
+        setConnected(false);
+        setError("Sorry, there was an error connecting to the server"); 
     }
     socket.onerror = () => {
-        //could not connect - route back to home page
-        setConnected(false);
-        //setSubmitError("Sorry, there was an error connecting to the server.")
         console.log("socket error");
+        setConnected(false);
+        setError("Sorry, there was an error connecting to the server"); 
     }
 
     setConnected(true);
@@ -32,11 +32,15 @@ function ChatPage(props) {
     const [username, setUsername] = useState("");
     const [connected, setConnected] = useState(false); 
     const [loading, setLoading] = useState(true); 
+    const [error, setError] = useState(""); 
     
+
+    //helper method used to route back to the homepage of the application
     var navHome = () => {
         navigate("/"); 
     }
     
+    //if the props are null then route back to homepage 
     if (props === null || props.location === null ||
         props.location.state === null) {
         console.log("No props. Route to home page."); 
@@ -48,6 +52,7 @@ function ChatPage(props) {
         );
     }
 
+    //if there is no username then route back to homepage 
     const user = props.location.state.username; 
     if(user === null || user === "" || user === undefined) {
         console.log("No username specified. Route to home page."); 
@@ -65,16 +70,16 @@ function ChatPage(props) {
         setLoading(false); 
     }
 
-    console.log("here")
+    /*console.log("here")
     console.log(username)
-    console.log(typeof(username))
+    console.log(typeof(username))*/
 
-    if(!connected && username !== "") {
-        connectWebsocket(username, setConnected);
+    if(!connected && username !== "" && error === "") {
+        connectWebsocket(username, setConnected, setError);
     }
 
     var renderPage = () => {
-        if (!loading) {
+        if (!loading && error === "") {
             return (
                 <div className={classes.root}>
                     <Grid container spacing={0}>
@@ -83,6 +88,10 @@ function ChatPage(props) {
                         </Grid>
                     </Grid>
                 </div>
+            );
+        } else if(error !== "") {
+            return (
+                <h4>{error}</h4>
             );
         }
 
