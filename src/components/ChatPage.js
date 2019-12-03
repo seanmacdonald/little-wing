@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { navigate } from '@reach/router';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { ChatPageStyles } from '../styles/ChatPageStyles'; 
 
@@ -33,6 +34,8 @@ function ChatPage(props) {
     const [connected, setConnected] = useState(false); 
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState(""); 
+    const [join, setJoin] = useState(false); 
+    const [make, setMake] = useState(false); 
     
 
     //helper method used to route back to the homepage of the application
@@ -85,6 +88,7 @@ function ChatPage(props) {
                     <Grid container spacing={0}>
                         <Grid item xs={12}>
                             <Paper className={classes.navTitle}>Speak Free</Paper>
+                            {renderContent()}
                         </Grid>
                     </Grid>
                 </div>
@@ -99,6 +103,33 @@ function ChatPage(props) {
             <div className={classes.loading}>
                     <CircularProgress className={classes.progress}/>
             </div>
+        );
+    }
+
+    //renders the appropriate content which may include:
+    // 1 - The options to JOIN or MAKE a chat 
+    // 2 - The available chats to select from 
+    // 3 - A make chat interface 
+    // 4 - A chat window that the user is now in 
+    var renderContent = () => {
+        if(!join && !make) {
+            return renderOptions(); 
+        }
+    }
+
+    var renderOptions = () => {
+        console.log("hi"); 
+        return(
+            <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+            className={classes.buttonContainer}
+            >
+                <Button className={classes.button}>Join Chat</Button><br/>
+                <Button className={classes.button}>Make Chat</Button>
+            </Grid>
         );
     }
 

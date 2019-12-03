@@ -1,5 +1,8 @@
 import { makeStyles } from '@material-ui/core'; 
 
+var themeOrange = "#EA7200"; 
+var themeTeal = "#006D76"; 
+
 export const ChatPageStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
@@ -8,7 +11,7 @@ export const ChatPageStyles = makeStyles(theme => ({
       },
     progress: {
         //margin: theme.spacing(2),
-        color: "#EA7200", 
+        color: themeOrange, 
     },
     loading: {
         //textAlign: "center",
@@ -25,7 +28,20 @@ export const ChatPageStyles = makeStyles(theme => ({
         textAlign: 'left',
         fontSize: 30,
         color: "white",
-        backgroundColor: "#006D76" //teal
+        backgroundColor: themeTeal 
     },
+    button: {
+        //marginTop: theme.spacing(2),
+        backgroundColor: themeOrange,
+        '&:hover': {
+            opacity: 0.5,
+            backgroundColor: themeOrange,
+          },
+        color: "white", 
+        fontSize: 18,
+    },
+    buttonContainer: {
+        margin: theme.spacing(2),
+    }
 }));
 
