@@ -77,9 +77,9 @@ function HomePage() {
 
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <h1 className={classes.bodyTitle}>
-                Enter username:
-            </h1>
+            <h3 className={classes.bodyTitle}>
+                Enter username to get started below. 
+            </h3>
             <TextField
                 id="outlined-with-placeholder"
                 label="username"

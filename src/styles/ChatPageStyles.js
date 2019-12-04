@@ -19,6 +19,7 @@ export const ChatPageStyles = makeStyles(theme => ({
         alignItems: "center", 
         display: "flex",
         justifyContent: "center",
+        marginTop: theme.spacing(10),
     }, 
     loading2: {
         //verticalAlign: "middle"
@@ -42,6 +43,9 @@ export const ChatPageStyles = makeStyles(theme => ({
     },
     buttonContainer: {
         margin: theme.spacing(2),
+    }, 
+    message: {
+        color: themeTeal, 
     }
 }));
 

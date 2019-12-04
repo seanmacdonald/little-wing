@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { ChatPageStyles } from '../styles/ChatPageStyles'; 
+import axios from 'axios'; 
 
 
 var connectWebsocket = (username, setConnected, setError) => {
@@ -35,6 +36,8 @@ function ChatPage(props) {
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState(""); 
     const [join, setJoin] = useState(false); 
+    const [joinLoading, setJoinLoading] = useState(false); 
+    const [chats, setChats] = useState(null); 
     const [make, setMake] = useState(false); 
     
 
@@ -81,6 +84,28 @@ function ChatPage(props) {
         connectWebsocket(username, setConnected, setError);
     }
 
+    //Handler method for when join chat is pressed 
+    var handleJoin = () => {
+        console.log("join pressed"); 
+        setJoinLoading(true); 
+        setJoin(true); 
+        axios.get("http://localhost:8080/chats")
+            .then((response) => {
+                setJoinLoading(false); 
+                console.log(response.data); 
+                setChats(response.data); 
+            })
+            .catch((error) => {
+                setJoinLoading(false); 
+                console.log(error); 
+            });
+    }
+
+    //Handler method for when make chat is pressed
+    var handleMake = () => {
+        console.log("make pressed"); 
+    }
+
     var renderPage = () => {
         if (!loading && error === "") {
             return (
@@ -93,15 +118,19 @@ function ChatPage(props) {
                     </Grid>
                 </div>
             );
-        } else if(error !== "") {
+        } else if(!loading && error !== "") {
             return (
                 <h4>{error}</h4>
             );
         }
 
+        return renderSpinner();
+    }
+
+    var renderSpinner = () => {
         return (
             <div className={classes.loading}>
-                    <CircularProgress className={classes.progress}/>
+                <CircularProgress className={classes.progress}/>
             </div>
         );
     }
@@ -114,11 +143,14 @@ function ChatPage(props) {
     var renderContent = () => {
         if(!join && !make) {
             return renderOptions(); 
+        } else if(join && joinLoading) {
+            return renderSpinner(); 
+        } else if(join && !joinLoading) {
+            return renderChats(); 
         }
     }
 
     var renderOptions = () => {
-        console.log("hi"); 
         return(
             <Grid
             container
@@ -127,9 +159,18 @@ function ChatPage(props) {
             alignItems="center"
             className={classes.buttonContainer}
             >
-                <Button className={classes.button}>Join Chat</Button><br/>
-                <Button className={classes.button}>Make Chat</Button>
+                <h3 className={classes.message}>Hi {username}! Get started by joining or making a chat group.</h3>
+                <Button className={classes.button} onClick={handleJoin.bind(this)}>Join Chat</Button><br/>
+                <Button className={classes.button} onClick={handleMake.bind(this)}>Make Chat</Button>
             </Grid>
+        );
+    }
+
+    var renderChats = () => {
+        return (
+            <div>
+                {chats}
+            </div>
         );
     }
 
