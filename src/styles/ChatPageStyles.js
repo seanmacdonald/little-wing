@@ -46,6 +46,9 @@ export const ChatPageStyles = makeStyles(theme => ({
     }, 
     message: {
         color: themeTeal, 
+    }, 
+    list: {
+        listStyleType: "none"
     }
 }));
 

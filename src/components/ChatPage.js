@@ -37,7 +37,7 @@ function ChatPage(props) {
     const [error, setError] = useState(""); 
     const [join, setJoin] = useState(false); 
     const [joinLoading, setJoinLoading] = useState(false); 
-    const [chats, setChats] = useState(null); 
+    const [chats, setChats] = useState([]); 
     const [make, setMake] = useState(false); 
     
 
@@ -93,7 +93,11 @@ function ChatPage(props) {
             .then((response) => {
                 setJoinLoading(false); 
                 console.log(response.data); 
-                setChats(response.data); 
+                if("Chats" in response.data){
+                    setChats(response.data.Chats); 
+                } else {
+                    console.log("Could not get Chats"); 
+                }
             })
             .catch((error) => {
                 setJoinLoading(false); 
@@ -169,7 +173,13 @@ function ChatPage(props) {
     var renderChats = () => {
         return (
             <div>
-                {chats}
+                <ul className={classes.list}>
+                    {chats.map(item => (
+                        <li key={item}>
+                            <label>{item}</label>
+                        </li>
+                    ))}
+                </ul>
             </div>
         );
     }
