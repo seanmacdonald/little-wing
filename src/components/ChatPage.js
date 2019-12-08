@@ -76,10 +76,6 @@ function ChatPage(props) {
         setLoading(false); 
     }
 
-    /*console.log("here")
-    console.log(username)
-    console.log(typeof(username))*/
-
     if(!connected && username !== "" && error === "") {
         connectWebsocket(username, setConnected, setError);
     }
@@ -106,8 +102,14 @@ function ChatPage(props) {
     }
 
     //Handler method for when make chat is pressed
+    //TODO: implement
     var handleMake = () => {
         console.log("make pressed"); 
+    }
+
+    //TODO: implement 
+    var handleJoinChat = (chat_name) => {
+        console.log("join chat called: ", chat_name); 
     }
 
     var renderPage = () => {
@@ -131,6 +133,7 @@ function ChatPage(props) {
         return renderSpinner();
     }
 
+    //Renders a circular progress idicator
     var renderSpinner = () => {
         return (
             <div className={classes.loading}>
@@ -154,6 +157,8 @@ function ChatPage(props) {
         }
     }
 
+    //Renders the possible options for the application which
+    //are the options to either "join" or "make" a chat group
     var renderOptions = () => {
         return(
             <Grid
@@ -164,23 +169,37 @@ function ChatPage(props) {
             className={classes.buttonContainer}
             >
                 <h3 className={classes.message}>Hi {username}! Get started by joining or making a chat group.</h3>
-                <Button className={classes.button} onClick={handleJoin.bind(this)}>Join Chat</Button><br/>
-                <Button className={classes.button} onClick={handleMake.bind(this)}>Make Chat</Button>
+                <Button 
+                    className={classes.button} 
+                    onClick={handleJoin.bind(this)}
+                >Join Chat</Button><br/>
+                <Button 
+                    className={classes.button} 
+                    onClick={handleMake.bind(this)}
+                >Make Chat</Button>
             </Grid>
         );
     }
 
+    //Renders a list of the available chats that the user can join 
     var renderChats = () => {
         return (
-            <div>
+            <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="center">
                 <ul className={classes.list}>
                     {chats.map(item => (
                         <li key={item}>
-                            <label>{item}</label>
+                            <Button 
+                                className={classes.listButton} 
+                                onClick={handleJoinChat.bind(this, item)}
+                            >{item}</Button>
                         </li>
                     ))}
                 </ul>
-            </div>
+            </Grid>
         );
     }
 

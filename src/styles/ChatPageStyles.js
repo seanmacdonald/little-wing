@@ -49,6 +49,10 @@ export const ChatPageStyles = makeStyles(theme => ({
     }, 
     list: {
         listStyleType: "none"
+    }, 
+    listButton: {
+        color: themeOrange, 
+        fontSize: 18,
     }
 }));
 
