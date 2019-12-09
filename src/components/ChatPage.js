@@ -44,8 +44,10 @@ function ChatPage(props) {
     const [join, setJoin] = useState(false); 
     const [joinLoading, setJoinLoading] = useState(false); 
     const [chats, setChats] = useState([]); 
+    const [chatName, setChatName] = useState("");
+    const  [messages, setMessages] = useState([]);  
     const [make, setMake] = useState(false); 
-    const[socket, setSocket] = useState(null); 
+    const [socket, setSocket] = useState(null); 
     
 
     //helper method used to route back to the homepage of the application
@@ -116,9 +118,23 @@ function ChatPage(props) {
     }
 
     //Attempts to add the user to the chose chat 
+    //TODO: get all the messages to display instead of just the 
+    //      last message
+    //TODO: handle error case (when chat could not be joined)
     var handleJoinChat = (chat_name) => {
         console.log("join chat called: ", chat_name); 
         socket.send(JOIN_CHAT_CODE + chat_name); 
+        setChatName(chat_name); 
+        setMessages(["one", "two"]); //clear any previous messages
+        socket.onmessage = (msg) => {
+            //console.log(msg.data); 
+            console.log(messages); 
+            let msgs = messages.slice(0, messages.length); 
+            msgs.push(msg.data); 
+            //console.log(messages); 
+            //console.log(msgs); 
+            setMessages(msgs); //put new array back in state 
+        }
 
     }
 
@@ -162,8 +178,10 @@ function ChatPage(props) {
             return renderOptions(); 
         } else if(join && joinLoading) {
             return renderSpinner(); 
-        } else if(join && !joinLoading) {
-            return renderChats(); 
+        } else if(join && !joinLoading && chatName === "") {
+            return renderAvailableChats(); 
+        } else if(join && !joinLoading && chatName !== "") {
+            return renderChat(); 
         }
     }
 
@@ -192,7 +210,7 @@ function ChatPage(props) {
     }
 
     //Renders a list of the available chats that the user can join 
-    var renderChats = () => {
+    var renderAvailableChats = () => {
         return (
             <Grid
                 container
@@ -211,6 +229,22 @@ function ChatPage(props) {
                 </ul>
             </Grid>
         );
+    }
+
+    var renderChat = () => {
+        return (
+            <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="center"
+            >
+                <h2 className={classes.chatTitle}>{chatName}</h2>
+                <div>
+                    {messages}
+                </div>
+            </Grid>
+        ); 
     }
 
     return (
