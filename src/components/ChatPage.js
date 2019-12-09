@@ -7,6 +7,11 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { ChatPageStyles } from '../styles/ChatPageStyles'; 
 import axios from 'axios'; 
 
+const SEND_MESSAGE_CODE = "1"; 
+const MAKE_CHAT_CODE = "2"; 
+const JOIN_CHAT_CODE = "3"; 
+const LEAVE_CHAT_CODE = "4"; 
+
 
 var connectWebsocket = (username, setConnected, setError) => {
     var socket = new WebSocket("ws://localhost:8080/connect?user=" + username);
@@ -26,6 +31,7 @@ var connectWebsocket = (username, setConnected, setError) => {
     }
 
     setConnected(true);
+    return socket; 
 }
 
 function ChatPage(props) {
@@ -39,6 +45,7 @@ function ChatPage(props) {
     const [joinLoading, setJoinLoading] = useState(false); 
     const [chats, setChats] = useState([]); 
     const [make, setMake] = useState(false); 
+    const[socket, setSocket] = useState(null); 
     
 
     //helper method used to route back to the homepage of the application
@@ -77,7 +84,8 @@ function ChatPage(props) {
     }
 
     if(!connected && username !== "" && error === "") {
-        connectWebsocket(username, setConnected, setError);
+        var web_socket = connectWebsocket(username, setConnected, setError);
+        setSocket(web_socket); 
     }
 
     //Handler method for when join chat is pressed 
@@ -107,9 +115,11 @@ function ChatPage(props) {
         console.log("make pressed"); 
     }
 
-    //TODO: implement 
+    //Attempts to add the user to the chose chat 
     var handleJoinChat = (chat_name) => {
         console.log("join chat called: ", chat_name); 
+        socket.send(JOIN_CHAT_CODE + chat_name); 
+
     }
 
     var renderPage = () => {
